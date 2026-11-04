@@ -1,356 +1,147 @@
-# MineServe
+# MineServe for Linux
 
-[![Google Play](https://img.shields.io/badge/Google_Play-Get%20it%20on%20Google%20Play-414141?logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=com.devwithzachary.mineserve)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 [![Discord Community](https://img.shields.io/badge/Discord-Join%20Community-5865F2.svg?logo=discord&logoColor=white)](https://discord.gg/csGrrg5MGF)
-[![Android MinSDK](https://img.shields.io/badge/Min%20SDK-23%20%28Android%206.0%2B%29-brightgreen.svg)](https://developer.android.com/about/versions/marshmallow)
-[![Kotlin](https://img.shields.io/badge/Language-Kotlin-blue.svg)](https://kotlinlang.org/)
-[![UI Framework](https://img.shields.io/badge/UI-Jetpack%20Compose%20Material3-purple.svg)](https://developer.android.com/jetpack/compose)
-[![Java Environments](https://img.shields.io/badge/Java%20Runtimes-Java%208%20%7C%2017%20%7C%2021%20%7C%2025-orange.svg)](#3-isolated-java-runtime-architecture-javaruntimemanagerkt)
-[![Architecture](https://img.shields.io/badge/Architecture-ARM64%20%7C%20x86__64%20%7C%20ARMv7-orange.svg)](#4-multi-architecture-support)
-[![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+[![Original MineServe project](https://img.shields.io/badge/Original%20project-MineServe-blue)](https://github.com/devwithzachary/MineServe)
 
-**MineServe** is an open-source Minecraft server manager with two editions: a native Android app and a Linux edition that manages isolated Minecraft servers with Docker and a browser-based admin panel. The Linux edition is designed for Debian and Ubuntu hosts; the Android edition runs servers without root access.
+**MineServe for Linux** is a Docker-based Minecraft server manager for Debian and Ubuntu. It runs each Minecraft server in a separate container and provides a browser-based admin panel for setup and daily management. Use the `mineserve` terminal command to configure and control the panel.
 
-On Linux, MineServe runs each Minecraft server in its own Docker container and provides a responsive web panel for server creation, console, files, plugins and mods, world operations, backups, performance, and networking. On Android, MineServe uses a native **PRoot** runtime, isolated Java environments, and a **Jetpack Compose** interface to turn a phone or tablet into a portable server host.
+**MineServe for Linux** là công cụ quản lý máy chủ Minecraft bằng Docker dành cho Debian và Ubuntu. Mỗi máy chủ Minecraft chạy trong một container riêng; bảng điều khiển web hỗ trợ cấu hình và quản lý hằng ngày. Dùng lệnh terminal `mineserve` để cấu hình và điều khiển panel.
 
-<p align="center">
-  <a href="https://play.google.com/store/apps/details?id=com.devwithzachary.mineserve">
-    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="80">
-  </a>
-</p>
+> This repository preserves the original MineServe project attribution. The Linux edition described here is separate from the original Android application.
+>
+> Repository này giữ nguyên ghi nhận nguồn gốc MineServe. Bản Linux được mô tả ở đây hoạt động riêng với ứng dụng Android gốc.
 
-> [!NOTE]
-> **Active Development & Roadmap**: MineServe is under active development. Check out our public [Product Roadmap](ROADMAP.md) to see planned features for upcoming milestones, or [submit an issue on GitHub](https://github.com/devwithzachary/MineServe/issues) if you discover a bug or have a suggestion!
+## Features / Tính năng
 
----
+* Manage multiple servers: Paper, Purpur, Paper + Geyser cross-play, Vanilla, Fabric, Forge, NeoForge, and Folia.
+* Create servers with a name, MOTD, Minecraft version, initial and maximum RAM, and Java/Bedrock ports; EULA acceptance is required.
+* Manage server lifecycle, console, logs, command macros, files, plugins/mods, players, backups, automation, and worlds.
+* Browse and edit text files, upload files, search and install compatible projects from Modrinth, and import modpacks where supported.
+* Import/export worlds, reset dimensions, optimize world storage, and install/use Squaremap on supported servers.
+* View CPU, memory, disk usage, TPS/MSPT, JVM and game-loop health, process diagnostics, and server storage details.
+* Check Docker Engine status, reinstall the MineServe runtime, and install Java 8, 17, 21, or 25 server images in App Settings.
+* Connect the panel locally, over LAN, or through ngrok, playit.gg, or bore.pub. Missing tunnel agents are downloaded on demand.
 
-## 🐧 Linux Edition at a Glance
+* Quản lý nhiều máy chủ: Paper, Purpur, Paper + Geyser cross-play, Vanilla, Fabric, Forge, NeoForge và Folia.
+* Tạo máy chủ với tên, MOTD, phiên bản Minecraft, RAM tối thiểu/tối đa và cổng Java/Bedrock; cần chấp nhận EULA.
+* Quản lý trạng thái máy chủ, console, log, lệnh nhanh, tệp, plugin/mod, người chơi, bản sao lưu, lịch tự động và thế giới.
+* Duyệt và sửa tệp văn bản, tải tệp lên, tìm và cài dự án tương thích từ Modrinth, nhập modpack nếu nền tảng hỗ trợ.
+* Nhập/xuất thế giới, đặt lại dimension, tối ưu dung lượng thế giới và cài/dùng Squaremap trên máy chủ được hỗ trợ.
+* Theo dõi CPU, RAM, dung lượng đĩa, TPS/MSPT, tình trạng JVM và game loop, chẩn đoán tiến trình và dung lượng máy chủ.
+* Kiểm tra Docker Engine, cài đặt lại runtime MineServe và cài image máy chủ Java 8, 17, 21 hoặc 25 trong App Settings.
+* Truy cập panel nội bộ, qua LAN hoặc qua ngrok, playit.gg, bore.pub. Tunnel agent còn thiếu sẽ được tải tự động khi cần.
 
-The Linux edition is controlled from a web browser. Install the Debian package, run `mineserve` in a terminal to start or configure the panel, then sign in from the host or another device according to the selected exposure mode.
+## Requirements / Yêu cầu
 
-* Create and manage multiple independent Docker servers: Paper, Purpur, Paper + Geyser cross-play, Vanilla, Fabric, Forge, NeoForge, and Folia.
-* Choose a supported Minecraft version, server name, MOTD, RAM range, and ports; server creation requires explicit EULA acceptance.
-* Manage console commands and macros, logs, server files, plugin/mod uploads and Modrinth installs, players, backups, and world import/export/reset/optimization.
-* Review CPU, memory, storage, TPS/MSPT, JVM and game-loop health, process diagnostics, and server storage details.
-* Configure the Docker runtime and install Java 8, 17, 21, or 25 server images from App Settings.
-* Expose the admin panel locally, on the LAN, or through ngrok, playit.gg, or bore.pub. Tunnel agents are installed on demand when missing.
+* Debian or Ubuntu Linux and a CPU architecture supported by Docker and the selected Minecraft images.
+* Python 3.10 or newer, Docker Engine, sudo, and miniupnpc. These are declared as Debian package dependencies.
+* Internet access to download MineServe tunnel agents, Minecraft container images, and server files.
+* Sufficient disk space and RAM for Docker images, worlds, backups, and running Minecraft servers.
 
-See [Run MineServe on Linux with Docker](#-run-mineserve-on-linux-with-docker) for installation, setup, and tunnel details.
+* Debian hoặc Ubuntu Linux, kiến trúc CPU được Docker và image Minecraft đã chọn hỗ trợ.
+* Python 3.10 trở lên, Docker Engine, sudo và miniupnpc. Đây là các dependency được khai báo trong gói Debian.
+* Kết nối Internet để tải tunnel agent, image Minecraft và tệp máy chủ.
+* Đủ dung lượng đĩa và RAM cho Docker image, thế giới, bản sao lưu và máy chủ Minecraft đang chạy.
 
-## 📱 Android Edition Features
+## Install / Cài đặt
 
-* **🔒 100% Rootless Operation**: Executes entirely in Android user-space using PRoot ptrace system call interception. No root access, Magisk, or bootloader unlocking required.
-* **🎮 Comprehensive Server Engine Support**:
-  * **PaperMC**: High-performance, stable Minecraft server software with comprehensive Bukkit/Spigot/Paper plugin support.
-  * **PurpurMC**: Drop-in Paper replacement with extensive gameplay configurability and performance tweaks.
-  * **Folia**: Cutting-edge regionized multithreading server software for high player concurrency.
-  * **FabricMC**: Lightweight, modular modding framework and server platform for modern versions and snapshots.
-  * **NeoForged**: Modern community-driven modding API and server platform.
-  * **Minecraft Forge**: Full support for classic and modern Forge modded servers (from 1.1 up to 1.20+) with automated installer handling, dedicated JVM installer heap allocation, and live setup progress streaming.
-  * **Mojang Vanilla**: Official standalone Minecraft server software from Mojang Studios, with historical support down to version 1.0.
-  * **Bedrock Geyser / Floodgate**: Seamless protocol translation proxy enabling Bedrock edition players on iOS, Android, and consoles to connect to your Java server.
-* **☕ Isolated Java Runtime Environments**: Automatic detection and 1-tap installation of OpenJDK versions inside the container:
-  * **Java 25 / Java 21**: For modern Minecraft 1.20.5+ and snapshots.
-  * **Java 17**: For Minecraft 1.17 - 1.20.4.
-  * **Java 8**: For legacy Minecraft releases (from 1.16.5 down to 1.0) and classic Forge servers.
-* **🖥️ Web Remote Admin Panel (LAN & Web Management)**:
-  * **Built-in Local Web Admin**: Embedded zero-dependency lightweight local HTTP server allowing full management from any desktop browser or tablet on the same Wi-Fi network.
-  * **Interactive Console & Remote File Manager**: Real-time terminal output with syntax highlighting, command execution bar, and in-browser code editor for server configuration files.
-  * **Live Telemetry Dashboard**: Real-time TPS and MSPT gauges, server memory utilization progress bar, CPU usage, and online player monitoring.
-  * **Secure Authentication & Public Exposure**: Cryptographic session tokens, constant-time verification, brute-force rate limiting, and optional public exposure via UPnP router port forwarding, Bore, or Playit tunnels.
-* **🌐 Universal Router Port Forwarding (UPnP & NAT-PMP)**:
-  * **Automatic Router Port Forwarding**: Zero-config UPnP (SSDP/SOAP) and RFC 6886 NAT-PMP client for automatic router port mapping. Friends can connect directly to your residential public WAN IP without third-party tunnel proxies.
-  * **Dynamic WAN Connection Card**: Server Settings and status cards display mapped public WAN IP and port with live mapping health, local IP mapping, and a 1-tap copy button for direct server invites.
-* **🌐 Zero-Port-Forwarding Public Tunneling**:
-  * **High-Speed Native Android Tunnels**: Both **bore (`bore.pub`)** and **Playit.gg** agents run directly as native Android binaries outside PRoot virtualization, eliminating ptrace emulation overhead to reduce network latency by 30+ ms.
-  * **Dual Tunnel Providers**: Instant free TCP tunneling with **bore (`bore.pub`)** or persistent vanity subdomains (`*.ply.gg`, `*.joinmc.link`) with **Playit.gg**.
-  * **Play Anywhere**: Host servers over mobile cellular data (4G/5G) or restrictive home Wi-Fi behind CGNAT without configuring router port forwarding.
-  * **1-Tap Browser Claiming**: Interactive claim banners and direct Playit Secret key support with automatic reconnection.
-* **📱 Dynamic QR Code & Cross-Play Deep-Link Sharing**:
-  * Dynamic QR codes for both Public Online Link (Tunnel) and Local Wi-Fi (LAN) connections.
-  * 1-tap Bedrock `minecraft://?addExternalServer=` deep links so friends can tap or scan to open Bedrock and import the server instantly.
-  * Native system share sheet export for Discord, WhatsApp, Telegram, and SMS invites.
-* **💤 Smart Idle Sleep & Auto-Wake on Ping**:
-  * **Idle Auto-Shutdown**: Automatically suspends servers after N minutes of 0 connected players (configurable to 5m, 10m, 15m, 30m, 60m) to preserve battery life and prevent device heating.
-  * **Auto-Wake on Ping**: Lightweight background standby listener on the server port (TCP for Java, UDP RakNet Unconnected Pong for Bedrock). When a player queries or joins from their in-game server list, MineServe automatically wakes and boots the server.
-* **⏱️ Flexible Scheduled Tasks & Cron Engine**:
-  * Background task automation for periodic world backups, full server backups, nightly server restarts, and custom in-game announcements.
-  * Supports interval quick chips (minutes/hours), daily schedules, weekly day-of-week selections with interval weeks, and advanced 5-field cron syntax with live validation.
-* **🗺️ Embedded Live Web Map (Squaremap)**:
-  * Built-in 2D live web map hosted on `http://127.0.0.1:8080` and rendered directly inside the app using Jetpack Compose `WebView`.
-  * 1-tap installation, automatic upgrade on Minecraft version changes, and removal of Squaremap with minimal mobile RAM overhead.
-  * Full world rendering tool with Overworld, Nether, and The End dimension selection, plus real-time player tracking.
-* **👥 Visual Player & Whitelist Management**:
-  * Full file-backed management tables for Whitelisted Players, Server Operators, Banned Players, and Banned IPs with 3D Minotar skin avatars.
-  * Dedicated full-screen player administration page for real-time kicking, banning, teleportation, gamemode switching, and item granting.
-* **🌍 Advanced World Management & Chunk Storage Optimizer**:
-  * **World Importer**: Direct `.zip` and `.mcworld` import from device storage or Google Drive with automated format detection, Java Anvil verification, and pre-import safety backups.
-  * **World Archive Exporter**: Export complete world saves (Overworld, Nether, End) with Save to Storage and Android Share Sheet support.
-  * **1-Tap Nether & End Dimension Reset**: Wipe and regenerate `world_nether` or `world_the_end` (`DIM-1` / `DIM1`) without affecting Overworld builds.
-  * **Chunk Pruning & Storage Optimizer**: Pure Kotlin Anvil (`.mca`) region analyzer that deletes uninhabited chunks (`InhabitedTime == 0`) and purges empty region files to reclaim storage space.
-* **📁 In-App File Explorer & Monospace Code Editor**:
-  * Full interactive directory navigation for `/servers/{serverId}/` with search, upload, create, delete, rename, and duplicate operations.
-  * **In-App Zip Extraction & Batch Import**: Unpack `.zip` archives directly within the file explorer into the active directory or a custom subfolder with optional automatic archive deletion. Import multiple plugins, mods, or config files simultaneously with multi-file selection.
-  * Syntax-highlighted code editor for `.yml`, `.json`, `.properties`, `.toml`, and `.txt` files with line numbering, search and replace with match counters, and cursor position tracking.
-* **🩺 Automated Crash Log Analyzer & Quick Fix Diagnostics**:
-  * Automatically parses `crash-reports/` and `logs/latest.log` upon failure to diagnose root causes (Java version mismatch, Out of Memory / OOM, mod ID conflicts, port conflicts, unaccepted EULA).
-  * Interactive diagnostic sheet providing 1-tap quick fixes to accept the EULA, switch Java runtimes, allocate RAM, or assign open ports.
-* **🔄 Upstream Build Updates & In-Place Minecraft Version Upgrades**:
-  * 1-tap checking and updating for PaperMC and Purpur upstream server builds while preserving worlds and configs.
-  * In-place Minecraft version upgrades from Server Settings with automated pre-upgrade safety backups, automatic Java runtime requirement alignment, and automated live web map upgrades.
-* **⚡ Interactive Live Terminal & Console Enhancements**:
-  * VT100/ANSI terminal emulator with direct standard input command delivery, colored log streaming, and scroll-to-bottom.
-  * Customizable quick-command macro hotbar chips above the console with built-in macro editor.
-  * Context-aware command auto-completion ribbon for `/` commands and subcommands.
-  * Command history memory recall (Up and Down buttons).
-  * Smooth terminal canvas scrollback with touch word detection, draggable teardrop selection handles, and floating action toolbar (Copy, Select All, Share).
-* **📊 Real-Time Game Engine Telemetry & Health**:
-  * **Rolling Canvas Telemetry Graphs**: Smooth real-time Canvas charts graphing rolling historical TPS (0 to 20 scale) and MSPT (0 to 100 ms scale) with dynamic threshold coloring and target reference lines.
-  * **Proactive Lag Diagnostics**: Live diagnostics card detects sustained tick degradation beyond the 50 ms budget, providing actionable recommendations to optimize performance.
-  * **Aikar's G1GC Flags Preset**: 1-tap action to apply Aikar's optimized JVM garbage collection flags tuned for minimal pauses and low CPU contention on mobile processors.
-  * **System Storage Safeguards**: Proactive warning banners when device free storage drops below 1 GB to protect worlds from corruption.
-  * Active container CPU utilization, RSS memory consumption via `/proc`, live player counts, and server storage footprints.
-* **🧩 Context-Aware Plugins & Mods Management**:
-  * Engine-aware UI: Displays **"Plugins"** for Paper/Purpur, **"Mods"** for Fabric/NeoForge/Forge, and automatically hides the tab for Vanilla servers.
-  * **Modrinth (.mrpack) Modpack Importer**: 1-tap download and installation of official Modrinth `.mrpack` archives with automated dependency resolution, client-only mod filtering, and server overrides extraction.
-  * **Modrinth API Integration**: Search and browse plugins and mods with project thumbnails, categories, author credits, and full descriptions.
-  * **1-Tap Installation**: Automatically resolves version download URLs matching the target server's loader and Minecraft release.
-  * **Custom `.JAR` Import**: Import plugins and mods directly from Android device storage using the system Document Picker.
-* **⚙️ Server Properties & Visual Configuration**:
-  * Intuitive switches and sliders for Server Port, MOTD, Max Players, Game Mode, Difficulty, PVP, Whitelist, View Distance, Animal/Monster Spawning, and Simulation Distance.
-  * **Dynamic Server RAM Reallocation**: Reconfigure allocated RAM memory on existing servers directly within Settings, complete with device memory recommendations and restart advisories.
-* **💾 World & Server Snapshot Backups**:
-  * **Cloud Backup Sync (100% F-Droid Compliant)**: Automated off-device sync to Nextcloud, ownCloud, WebDAV, or any Android Storage Access Framework cloud directory (Google Drive, OneDrive, SD card) with zero proprietary Play Services libraries.
-  * **World Save Backup**: Rapid snapshot archiving of only the world save directory.
-  * **Full Server Backup**: Complete backup of server configuration, plugins/mods, logs, and worlds.
-  * **1-Tap Restore, Export & Deletion**: Instant rollback restoration, direct deletion to reclaim device storage, and export to Android public Downloads or system Share sheet.
-  * **Automated Retention Limits**: Configure scheduled backup tasks to keep the last 3, 5, 10, 20, or all backups, automatically pruning older archives.
-* **🌐 Smart Port Allocation & Persistent LAN Card**:
-  * Automatically suggests the first available port (starting at `25565`) when creating new servers and displays warnings for port conflicts.
-  * Persistent LAN address card above server tabs (`<ip>:<port>`) with a 1-tap copy button for fast multiplayer connection sharing.
-* **🛡️ Persistent Foreground Execution**:
-  * Runs inside an Android Foreground Service with CPU `WakeLock` protection, preventing Android Doze or battery optimizers from terminating your server when switching apps or locking your screen.
-
----
-
-## 🛠️ Android Edition: Technical Architecture
-
-```
-+-----------------------------------------------------------------------+
-|                    Android UI Layer (Jetpack Compose)                 |
-|   DashboardScreen | ServerDetailScreen | CreateWizard | AppSettings   |
-|   (Console | Perf | Automation | Files | World | LiveMap | Settings)  |
-|   (Players | Backups | Plugins/Mods) | RemoteAdminScreen              |
-+-----------------------------------------------------------------------+
-                                   |
-                                   v
-+-----------------------------------------------------------------------+
-|                         Kotlin Engine Core                            |
-|    MainViewModel | ServerProcessManager | JavaRuntimeManager          |
-|    ServerRepository | BackupRepository | PluginRepository             |
-|    AutomationScheduler | StandbyPingListener | TunnelManager          |
-|    PortForwardManager | WebAdminManager | CloudSyncManager            |
-|    ChunkOptimizer | CrashDiagnosticEngine | PRootEngine               |
-+-----------------------------------------------------------------------+
-             |                             |
-             v                             v
-+-----------------------+     +-----------------------------------------+
-|  Native JNI Layer     |     |   PRoot Virtualization Engine           |
-|  pty.cpp (Posix PTY)  |     |   libproot.so                           |
-|  - posix_openpt()     |     |   - ptrace syscall interception         |
-|  - grantpt/unlockpt   |     |   - Rootfs path isolation (-r)          |
-|  - fork() & execve()  |     |   - Fake root user mapping (-0)         |
-|  - Window resize      |     |   - Bind mounts (/dev, /proc, /sdcard)  |
-+-----------------------+     +-----------------------------------------+
-             |                             |
-             +--------------+--------------+
-                            |
-                            v
-+-----------------------------------------------------------------------+
-|                  Guest Linux Container (Ubuntu Base)                  |
-|     /usr/lib/jvm/java-{8,17,21,25}-openjdk-arm64                     |
-|     /servers/{serverId}/                                              |
-|     ├── server.jar (Paper / Purpur / Fabric / NeoForge / Vanilla)     |
-|     ├── server.properties, eula.txt                                  |
-|     ├── world/, world_nether/, world_the_end/                         |
-|     └── plugins/ or mods/                                             |
-+-----------------------------------------------------------------------+
-```
-
-### 1. PRoot Virtualization Engine (`libproot.so`)
-PRoot uses the `ptrace` system call mechanism to intercept and rewrite system calls from guest Linux binaries (such as OpenJDK). It translates file paths on-the-fly, allowing Minecraft server JARs and Java runtimes to operate within standard Linux filesystem hierarchies (`/usr`, `/etc`, `/tmp`) while physically residing in Android's app-private data directory (`context.filesDir`).
-
-### 2. Native PTY Terminal Subsystem (`pty.cpp`)
-Interactive server consoles require a Unix pseudo-terminal (PTY) to handle window dimensions (`TIOCSWINSZ`), process signals, ANSI escape color sequencing, and unbuffered standard I/O streaming. The native C++ layer allocates POSIX PTYs via `posix_openpt()` and launches OpenJDK child processes via `fork()` and `execve()`.
-
-### 3. Isolated Java Runtime Architecture (`JavaRuntimeManager.kt`)
-Different Minecraft versions require specific OpenJDK bytecode compatibility:
-* Minecraft 1.20.5+ requires **Java 21** or **Java 25**.
-* Minecraft 1.17 - 1.20.4 requires **Java 17**.
-* Minecraft 1.12.2 and older requires **Java 8**.
-
-MineServe provisions isolated OpenJDK runtimes inside the container filesystem and dynamically passes the correct binary path (`/usr/lib/jvm/java-<version>-openjdk-<arch>/bin/java`) when executing each server.
-
-### 4. Multi-Architecture Support
-MineServe compiles native virtualization libraries and bridges across multiple Android ABIs:
-* **ARM64 (`arm64-v8a`)**: Primary architecture for modern 64-bit Android smartphones and tablets.
-* **x86_64**: Optimized for 64-bit Android emulators, ChromeOS devices, and Intel/AMD hardware.
-* **ARMv7 (`armeabi-v7a`)**: Legacy 32-bit architecture support for older Android devices.
-
----
-
-## 📦 Open Source Credits & Components
-
-MineServe is built on the shoulders of incredible open-source projects:
-
-| Component / Project | Description & Purpose | License / Source |
-| :--- | :--- | :--- |
-| **PRoot (`libproot.so`)** | User-space `chroot`, `mount --bind`, and root emulation engine. | [PRoot Project](https://proot-me.github.io/) / GPL-2.0 |
-| **LinuxOnAndroid Project** | PRoot virtualization runtime, terminal bridge, and Android system foundation. | [LinuxOnAndroid](https://github.com/devwithzachary/LinuxOnAndroid) / GPL-3.0 |
-| **PaperMC & Folia** | High-performance and multithreaded Minecraft server engines. | [PaperMC](https://papermc.io/) / GPL-3.0 |
-| **PurpurMC** | Highly configurable drop-in replacement for Paper. | [PurpurMC](https://purpurmc.org/) / MIT |
-| **FabricMC** | Modular, lightweight modding toolchain and server environment. | [FabricMC](https://fabricmc.net/) / Apache-2.0 |
-| **NeoForged** | Modern community-driven modding API and server platform. | [NeoForged](https://neoforged.net/) / LGPL-2.1 |
-| **Minecraft Forge** | Modding platform and server software for Minecraft. | [MinecraftForge](https://forums.minecraftforge.net/) / LGPL-2.1 |
-| **Minotar** | Minecraft 3D player avatar, head, and skin rendering API service. | [Minotar](https://minotar.net/) / MIT |
-| **GeyserMC & Floodgate** | Protocol translation proxy enabling Bedrock players to join Java servers. | [GeyserMC](https://geysermc.org/) / MIT |
-| **Squaremap** | Lightweight, ultra-fast 2D live web map with Leaflet player tracking. | [Squaremap](https://github.com/jpenilla/squaremap) / MIT |
-| **Ubuntu Base** | Official root filesystem tarball providing the Linux container environment. | [Canonical Ltd.](https://cdimage.ubuntu.com/ubuntu-base/) / Canonical |
-| **Modrinth API** | Public REST API for discovering and downloading Minecraft plugins and mods. | [Modrinth](https://modrinth.com/) / AGPL-3.0 |
-| **bore (`bore.pub`)** | Modern, zero-config TCP tunneling tool enabling instant public port forwarding. | [bore](https://github.com/ekzhang/bore) / MIT |
-| **Playit.gg** | Global game server tunneling proxy network providing persistent subdomains. | [Playit.gg](https://playit.gg) / MIT |
-| **OkHttp & Coil** | High-performance HTTP client and image loading engine for Compose. | [Square](https://square.github.io/okhttp) & [Coil](https://coil-kt.github.io/coil) / Apache-2.0 |
-| **KotlinX Coroutines & Serialization** | Asynchronous coroutines and multiplatform JSON serialization for Kotlin. | [JetBrains](https://github.com/Kotlin) / Apache-2.0 |
-
-### 💖 Patreon Supporters
-Special thanks to our generous Patreon supporters whose contributions help fuel ongoing MineServe development:
-* **Old PC Gunk (and stuff)**
-* **насэр Хорр**
-
----
-
-## 📥 Android Edition: Download & Installation
-
-* **Google Play Store**: Install directly with automatic updates from [Google Play](https://play.google.com/store/apps/details?id=com.devwithzachary.mineserve).
-* **GitHub Releases**: Download standalone signed APK packages directly from [GitHub Releases](https://github.com/devwithzachary/MineServe/releases).
-* **F-Droid**: Build recipe and metadata configured under `com.devwithzachary.mineserve.yml`.
-
----
-
-## 🛠️ Android Edition: Building from Source
-
-### Prerequisites
-* **Android Studio**: Ladybug (2024.2.1) or newer recommended.
-* **JDK**: Java 21 (or Java 17+).
-* **Android NDK**: Version 28 (specifically `28.2.13676358` configured in `app/build.gradle.kts` for C++ compilation of `pty.cpp`).
-
-### Build Steps
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/devwithzachary/MineServe.git
-   cd MineServe
-   ```
-
-2. **Build Debug APK**:
-   ```bash
-   ./gradlew assembleDebug
-   ```
-
-3. **Install on connected device via ADB**:
-   ```bash
-   adb install app/build/outputs/apk/debug/app-debug.apk
-   ```
-
----
-
-## 🐳 Run MineServe on Linux with Docker
-
-### Requirements and installation
-
-Use a Debian or Ubuntu Linux host with a supported Docker-capable CPU architecture, internet access for downloading container images, and a user account that can access Docker. The package depends on Python 3, Docker, sudo, and miniupnpc. Install Docker through the package dependency or an existing Docker Engine installation. The panel manages Minecraft servers as Docker containers; MineServe itself is a host-side service and does not run inside a MineServe container.
-
-Build and install the native Debian package from the repository:
-
-On Debian or Ubuntu, build the package from this repository (requires `dpkg-deb`):
+Build and install the Debian package from a checkout:
 
 ```bash
+git clone https://github.com/devwithzachary/MineServe.git
+cd MineServe
 ./build-deb.sh
 sudo apt install ./mineserve.deb
 ```
 
-The package adds the installing account to Docker's `docker` group and configures a restricted sudo rule for the runtime reinstall action in App Settings. Log out and back in (or start a new login session) so the group membership takes effect, then run `mineserve`. Membership in the Docker group allows broad control over the host.
+The package adds the installing account to the `docker` group and installs a restricted sudo rule for the App Settings runtime action. Log out and back in (or start a new login session) before using Docker through MineServe. Docker group membership grants broad control over the host.
 
-Tunnel binaries are downloaded from their provider's release source into `~/.local/bin` on demand without `sudo`. See [ngrok Linux downloads](https://ngrok.com/download/linux), [playit releases](https://github.com/playit-cloud/playit-agent/releases), and [bore releases](https://github.com/ekzhang/bore/releases).
+Tạo và cài gói Debian từ mã nguồn:
 
-### Start the panel and configure access
+```bash
+git clone https://github.com/devwithzachary/MineServe.git
+cd MineServe
+./build-deb.sh
+sudo apt install ./mineserve.deb
+```
 
-The first `mineserve` launch asks for a panel username and password (at least 8 characters). The terminal menu has separate settings for credentials, panel port, exposure mode, and optional ngrok token. Choose **Khởi chạy / khởi động lại panel**, then open `http://127.0.0.1:<panel-port>` and sign in. The default panel port is `8080`.
+Gói sẽ thêm tài khoản cài đặt vào nhóm `docker` và cài sudo rule giới hạn cho thao tác runtime trong App Settings. Hãy đăng xuất rồi đăng nhập lại (hoặc mở login session mới) trước khi dùng Docker qua MineServe. Thành viên nhóm Docker có quyền kiểm soát rộng đối với host.
 
-Exposure options:
+## First launch and panel access / Khởi chạy và truy cập panel
 
-* **Local** binds the panel to `127.0.0.1`, so only the host can access it.
-* **LAN** makes the panel available through the host's network interfaces. Use the displayed LAN address from a trusted network.
-* **ngrok** requires an ngrok account and valid authtoken. Configure the token in the terminal menu.
-* **playit.gg** uses the installed agent profile; run `playit setup` once to claim it, then select playit in MineServe.
-* **bore.pub** can create a random public TCP address without an account token. It is also offered as an alternative when ngrok has no valid token.
+Run `mineserve`. On first launch, set a panel username and password; the password must be at least 8 characters. The terminal menu lets you start/restart the panel, configure credentials, panel port and exposure mode, view logs, stop the panel, or hide the menu while leaving the panel running. Running `mineserve` again opens the menu for the existing panel process rather than starting another instance.
 
-Once a tunnel is connected, MineServe shows its public panel address in the menu. Use **Ẩn menu** to leave the panel running in the background and return to the shell; run `mineserve` again to reopen the menu for the existing process. Choosing **Dừng web panel** stops the panel but leaves Minecraft containers running. This is a terminal-managed background service, not a graphical system tray app, and it does not start automatically at boot.
+Open `http://127.0.0.1:8080` on the host by default and sign in. Change the port in **Cấu hình → Cổng web panel** if needed. The panel is a terminal-managed background process, not a desktop tray application, and does not start automatically at boot.
 
-### Create and manage servers
+Chạy `mineserve`. Ở lần khởi chạy đầu, hãy đặt tên đăng nhập và mật khẩu panel; mật khẩu cần ít nhất 8 ký tự. Menu terminal cho phép khởi chạy/khởi động lại panel, cấu hình tài khoản, cổng panel và chế độ truy cập, xem log, dừng panel hoặc ẩn menu trong khi panel tiếp tục chạy. Chạy lại `mineserve` sẽ mở menu cho tiến trình panel hiện tại thay vì tạo instance khác.
 
-In the panel, select **Tạo server**, enter its name and MOTD, choose a platform and an available Minecraft version, allocate initial and maximum RAM, choose server ports, accept the Minecraft EULA, and create it. Paper + Geyser also configures a Bedrock UDP port. Each server runs in its own `itzg/minecraft-server` container with persistent data under `~/.local/share/mineserve/servers`.
+Mặc định, mở `http://127.0.0.1:8080` trên host và đăng nhập. Đổi cổng tại **Cấu hình → Cổng web panel** nếu cần. Panel chạy nền và được quản lý qua terminal, không phải ứng dụng khay hệ thống; panel không tự khởi chạy khi boot.
 
-App Settings reports Docker Engine status, offers the runtime reinstall action, and installs Java 8, 17, 21, or 25 images with one button. Minecraft container images are downloaded as needed; allow outbound internet access and enough disk space for images and worlds.
+### Exposure modes / Các chế độ truy cập
 
-### Management and data
+| Mode | English | Tiếng Việt |
+| --- | --- | --- |
+| Local | Binds to `127.0.0.1`; accessible only from the host. | Chỉ bind vào `127.0.0.1`, chỉ truy cập được từ host. |
+| LAN | Binds to host interfaces; use the LAN address shown by MineServe. | Bind vào các interface của host; dùng địa chỉ LAN MineServe hiển thị. |
+| ngrok | Requires an ngrok account and a valid authtoken. Configure it in the terminal menu. | Cần tài khoản ngrok và authtoken hợp lệ. Cấu hình token trong menu terminal. |
+| playit.gg | Claim the agent profile once with `playit setup`, then select playit in MineServe. | Claim agent một lần bằng `playit setup`, sau đó chọn playit trong MineServe. |
+| bore.pub | Provides a random public address without an account token. | Cấp địa chỉ public ngẫu nhiên, không cần token tài khoản. |
 
-Use the panel to start, stop, and restart each server container, send console commands, view logs, and edit server files. The management tabs include overview and server settings, Console, Performance, Files, Plugins/Mods, Players, Backups, World, Automation, and Squaremap when supported by the server type.
+Tunnel agents are installed into `~/.local/bin` on demand. The terminal menu shows the public panel address when the tunnel connects. Public access exposes the admin panel; use a trusted tunnel/network and a strong password.
 
-Each server runs in its own `itzg/minecraft-server` container with persistent data. The panel includes server version/build upgrades, visual properties and JVM settings, console and logs, file operations, player administration, Modrinth plugin/mod search and modpack installation, backups with restore and retention, WebDAV or mounted-folder sync, scheduled automation, world import/export/reset/chunk pruning, Squaremap, CPU/RAM/TPS/MSPT status, UPnP forwarding, and per-server Bore/Playit tunnels. App-specific QR sharing, Android system integrations, player skin avatars, and Android-only diagnostics remain native-app features. Linux console macros and command history are available in the web panel. For public hosting, put the panel behind HTTPS or a trusted VPN; Minecraft ports remain independently accessible to clients.
+Tunnel agent được cài vào `~/.local/bin` khi cần. Menu terminal hiển thị địa chỉ panel public sau khi tunnel kết nối. Truy cập public sẽ mở panel quản trị ra Internet; hãy dùng tunnel/mạng đáng tin cậy và mật khẩu mạnh.
 
-The terminal menu's **Xem log** option displays panel and tunnel logs; press Enter to return to the menu. Settings and credentials are stored under `~/.config/mineserve` with user-only permissions. Panel logs and server data are under `~/.local/share/mineserve`.
+## Create and manage servers / Tạo và quản lý máy chủ
 
----
+In the web panel, choose **Tạo server**, enter a name and MOTD, select a platform and available Minecraft version, set initial/maximum RAM and ports, accept the Minecraft EULA, and create the server. Paper + Geyser also configures a Bedrock UDP port. Each server uses an `itzg/minecraft-server` Docker image with persistent files.
 
-## 📖 Android Edition: Quick Usage Guide
+The panel provides server overview and settings, Console, Performance, Files, Plugins/Mods, Players, Backups, World, Automation, and Squaremap when supported. App Settings shows Docker Engine status, offers a runtime reinstall action, and installs Java server images with one button. Minecraft images are pulled as needed.
 
-### 1. First-Time Setup
-On initial launch, tap **Initialize Server Runtime**. MineServe will download and unpack the minimal Ubuntu base container and prepare the OpenJDK environment.
+Trong web panel, chọn **Tạo server**, nhập tên và MOTD, chọn platform cùng phiên bản Minecraft, đặt RAM tối thiểu/tối đa và cổng, chấp nhận Minecraft EULA rồi tạo máy chủ. Paper + Geyser cũng cấu hình cổng UDP cho Bedrock. Mỗi máy chủ dùng Docker image `itzg/minecraft-server` và lưu dữ liệu bền vững.
 
-### 2. Creating a Server
-1. Tap the **+** button on the Dashboard.
-2. Select your desired server engine (Paper, Purpur, Folia, Fabric, NeoForge, Forge, Vanilla).
-3. Select the Minecraft version and assign RAM (e.g. 2048 MB).
-4. Review configuration and port assignment, and check the box to agree to the Minecraft EULA.
-5. Tap **Download & Build Server**.
+Panel có các mục tổng quan và cấu hình máy chủ, Console, Performance, Files, Plugins/Mods, Players, Backups, World, Automation và Squaremap nếu được hỗ trợ. App Settings hiển thị trạng thái Docker Engine, có chức năng cài đặt lại runtime và cài image Java chỉ bằng một nút. Minecraft image sẽ được tải khi cần.
 
-### 3. Managing the Server
-The Server Details screen provides dedicated tabs to manage every aspect of your server:
-* **Console Tab**: View live colored terminal logs, use customizable macro hotbar buttons, and execute Minecraft commands with auto-completion.
-* **Performance Tab**: Monitor CPU, RAM, server storage, TPS/MSPT rolling graphs, engine and game-loop health, JVM/GC tuning (including Aikar flags), process diagnostics, container path, primary JAR, and storage contents. **App Settings** supports English and Vietnamese; Java presets and file manager controls follow the selected language, and files/folders open on double-click.
-* **Automation Tab**: Configure idle auto-shutdown, arm auto-wake on ping standby listeners, and set up cron-scheduled backups and restarts.
-* **Files Tab**: Browse server files, extract `.zip` archives in-place or into subfolders, edit configs in the monospace code editor, or inspect crash reports with the 1-tap Diagnostic Sheet.
-* **World Tab**: Import singleplayer `.zip` or `.mcworld` saves, export world archives, reset Nether or End dimensions, and optimize chunk storage.
-* **Live Map Tab**: Explore your world with an embedded 2D Squaremap web view and trigger full world renders.
-* **Settings Tab**: Reconfigure allocated RAM memory, adjust server rules (PVP, difficulty, max players), manage Java runtime versions, update builds, enable UPnP/NAT-PMP router port forwarding, and launch high-speed native tunnels (bore.pub or Playit.gg).
-* **Players Tab**: View connected players with 3D skin avatars, manage operator and whitelist permissions, and administer players from a full-screen management page (kick, ban, teleport, gamemode, item granting).
-* **Backups Tab**: Create full server or world-only snapshot zip archives, restore snapshots, configure automated cloud backup sync (Nextcloud, WebDAV, SAF), delete older archives, and export to storage.
-* **Plugins / Mods Tab**: Search Modrinth for plugins (Paper/Purpur), mods (Fabric/NeoForge/Forge), or import full `.mrpack` modpacks with 1 tap, or upload custom `.jar` files.
+## Data and logs / Dữ liệu và log
 
-### 4. Web Remote Admin Panel (LAN & Web Management)
-From **App Settings**, launch the built-in Web Remote Admin Panel to manage your servers, interactive terminal console, file editor, and live performance metrics from any desktop browser or tablet on your local Wi-Fi network, or expose it online via UPnP, Bore, or Playit tunnels.
+Default paths (respecting `XDG_CONFIG_HOME` and `XDG_DATA_HOME` when set):
 
----
+* Settings and credentials: `~/.config/mineserve/`
+* Panel logs, server files, and backups: `~/.local/share/mineserve/`
+* Per-server files: `~/.local/share/mineserve/servers/`
 
-## 🤝 Contributing & AI Policy
+The terminal menu's **Xem log** displays panel and tunnel logs. Minecraft console output and server logs are available from the server's panel pages.
 
-Contributions, bug reports, and feature requests are warmly welcomed! Feel free to open an issue or submit a pull request.
+Đường dẫn mặc định (tôn trọng `XDG_CONFIG_HOME` và `XDG_DATA_HOME` nếu được đặt):
 
-Please review our **[AI Usage Policy](AI.md)** for guidelines regarding the use of AI coding assistants when contributing to this project. All submitted code must be thoroughly tested, verified, and personally owned by the human author.
+* Cấu hình và thông tin đăng nhập: `~/.config/mineserve/`
+* Log panel, tệp máy chủ và bản sao lưu: `~/.local/share/mineserve/`
+* Tệp từng máy chủ: `~/.local/share/mineserve/servers/`
 
----
+Mục **Xem log** trong menu terminal hiển thị log panel và tunnel. Console Minecraft và log máy chủ nằm trong các trang quản lý máy chủ trên panel.
 
-## 📄 License
+## Uninstall / Gỡ cài đặt
 
-This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)** - see the [LICENSE](LICENSE) file for details. Included binaries (PRoot, talloc, libandroid-shmem) and server software remain under their respective open-source licenses.
+Remove the package with `sudo apt remove mineserve`. This leaves the MineServe settings and server data in your home directory. Remove `~/.config/mineserve` and `~/.local/share/mineserve` separately only if you also want to delete configuration, worlds, logs, and backups.
+
+Gỡ gói bằng `sudo apt remove mineserve`. Thao tác này giữ lại cấu hình và dữ liệu MineServe trong thư mục home. Chỉ xóa riêng `~/.config/mineserve` và `~/.local/share/mineserve` nếu bạn cũng muốn xóa cấu hình, thế giới, log và bản sao lưu.
+
+## Original authorship, credits, and license / Nguồn gốc, ghi nhận và giấy phép
+
+This Linux edition continues the **MineServe** project. Preserve the original project source and author attribution: [devwithzachary/MineServe](https://github.com/devwithzachary/MineServe), the [Google Play application](https://play.google.com/store/apps/details?id=com.devwithzachary.mineserve), and the [project community](https://discord.gg/csGrrg5MGF). Please retain these credits when redistributing or modifying the project.
+
+Bản Linux này tiếp nối dự án **MineServe**. Giữ nguyên nguồn mã và ghi nhận tác giả ban đầu: [devwithzachary/MineServe](https://github.com/devwithzachary/MineServe), [ứng dụng trên Google Play](https://play.google.com/store/apps/details?id=com.devwithzachary.mineserve) và [cộng đồng dự án](https://discord.gg/csGrrg5MGF). Vui lòng giữ các ghi nhận này khi phân phối hoặc chỉnh sửa dự án.
+
+MineServe is licensed under **GNU GPL v3.0**; see [LICENSE](LICENSE). Minecraft and the listed server platforms remain the property of their respective owners. Relevant open-source components include [PaperMC/Folia](https://papermc.io/), [Purpur](https://purpurmc.org/), [Fabric](https://fabricmc.net/), [NeoForged](https://neoforged.net/), [Forge](https://forums.minecraftforge.net/), [Geyser/Floodgate](https://geysermc.org/), [Squaremap](https://github.com/jpenilla/squaremap), [Modrinth](https://modrinth.com/), [bore](https://github.com/ekzhang/bore), and [playit.gg](https://playit.gg/); each retains its own license.
+
+MineServe được cấp phép theo **GNU GPL v3.0**; xem [LICENSE](LICENSE). Minecraft và các nền tảng máy chủ nêu trên thuộc quyền sở hữu của chủ sở hữu tương ứng. Các thành phần mã nguồn mở liên quan gồm [PaperMC/Folia](https://papermc.io/), [Purpur](https://purpurmc.org/), [Fabric](https://fabricmc.net/), [NeoForged](https://neoforged.net/), [Forge](https://forums.minecraftforge.net/), [Geyser/Floodgate](https://geysermc.org/), [Squaremap](https://github.com/jpenilla/squaremap), [Modrinth](https://modrinth.com/), [bore](https://github.com/ekzhang/bore) và [playit.gg](https://playit.gg/); mỗi dự án giữ giấy phép riêng.
+
+Special thanks to the original Patreon supporters: **Old PC Gunk (and stuff)** and **насэр Хорр**.
+
+Xin cảm ơn những người ủng hộ Patreon của dự án gốc: **Old PC Gunk (and stuff)** và **насэр Хорр**.
+
+## Contributing / Đóng góp
+
+Bug reports and contributions are welcome through the [project issue tracker](https://github.com/devwithzachary/MineServe/issues). Review [AI.md](AI.md) for the project's AI usage policy.
+
+Hoan nghênh báo lỗi và đóng góp qua [trang issue của dự án](https://github.com/devwithzachary/MineServe/issues). Xem [AI.md](AI.md) để đọc chính sách sử dụng AI của dự án.
