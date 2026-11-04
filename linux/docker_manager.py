@@ -582,7 +582,8 @@ def _run_managed_container(item):
 
 def server_logs(server_id, tail=300):
     _, item = _require_server(server_id)
-    result = _docker(["logs", "--tail", str(max(1, min(tail, 2000))), item["container"]], check=False)
+    args = ["logs", item["container"]] if str(tail).lower() == "all" else ["logs", "--tail", str(max(1, min(int(tail), 2000))), item["container"]]
+    result = _docker(args, check=False)
     return {"lines": (result.stdout + result.stderr).splitlines()}
 
 

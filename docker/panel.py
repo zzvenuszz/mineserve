@@ -425,7 +425,8 @@ class Handler(BaseHTTPRequestHandler):
                 elif len(segments) == 3:
                     self.send_json(server)
                 elif len(segments) == 4 and segments[3] == "console":
-                    self.send_json(docker_backend.server_logs(server_id))
+                    tail = urllib.parse.parse_qs(path.query).get("tail", [300])[0]
+                    self.send_json(docker_backend.server_logs(server_id, tail))
                 elif len(segments) == 4 and segments[3] == "diagnostics":
                     self.send_json(docker_backend.analyze_server_crash(server_id))
                 elif len(segments) == 4 and segments[3] == "metrics":
