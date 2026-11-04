@@ -1,0 +1,7 @@
+**
+!Dockerfile
+!docker/
+!docker/panel.py
+!linux/
+!linux/docker_manager.py
+!linux/webpanel.html

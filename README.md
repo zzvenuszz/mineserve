@@ -251,6 +251,43 @@ Special thanks to our generous Patreon supporters whose contributions help fuel 
 
 ---
 
+## 🐳 Run MineServe on Linux with Docker
+
+### Install the native Debian package
+
+On Debian or Ubuntu, build the package from this repository (requires `dpkg-deb`):
+
+```bash
+./build-deb.sh
+sudo apt install ./mineserve.deb
+```
+
+Log out and back in so the Docker group change takes effect, then run `mineserve`.
+
+The first run asks for the web panel username and password (minimum 8 characters), then opens the terminal menu. Configuration is split into separate items for credentials, panel port, exposure method, and optional ngrok token, so changing one setting does not ask for credentials again. Choose **Khởi chạy / khởi động lại panel** to start it. The panel runs in the background after the menu exits; choose **Ẩn menu** to return to the shell, then run `mineserve` again to reopen the menu for that same process. The menu can choose local-only, LAN, ngrok, playit.gg, or bore.pub exposure and displays the tunnel address once the agent reports it. Logs include panel, Minecraft, and tunnel output; press Enter after viewing logs to return to the menu. Credentials and settings are stored with user-only file permissions under `~/.config/mineserve`; server files and logs are under `~/.local/share/mineserve`.
+
+When an ngrok, playit, or bore executable is missing, MineServe downloads its Linux binary from the provider's official release source into `~/.local/bin` when that tunnel is selected or the panel starts. It does not need `sudo` for this install. See the providers' [ngrok Linux downloads](https://ngrok.com/download/linux), [playit releases](https://github.com/playit-cloud/playit-agent/releases), and [bore releases](https://github.com/ekzhang/bore/releases). Ngrok requires an account and valid authtoken; if none is set, MineServe offers to switch to bore.pub, which assigns a random remote port without a token. Playit can use its claimed agent profile. For playit, run `playit setup` once to claim the agent. Then select its exposure mode from the MineServe menu. For local mode, the panel binds only to `127.0.0.1`; LAN binds to all host interfaces. Tunnel modes bind the panel to loopback and start the selected agent.
+
+This is a terminal-managed background process, not a graphical system tray icon. It does not automatically start at boot; launch it with `mineserve` when needed.
+
+The Android application uses Android services, storage APIs, and JNI, so its APK cannot run as a Linux container. The native Linux edition manages multiple Minecraft containers through Docker Engine. It supports Paper, Purpur, Paper + Geyser cross-play, Vanilla, Fabric, Forge, NeoForge, and Folia, with version lists fetched from each platform's version service. Each server has its own container, port, RAM allocation, MOTD, files, and console. The web panel's **App Settings** page reports Docker Engine status, can reinstall its runtime package, and can pull Java 8, 17, 21, or 25 server images with one button.
+
+### Start and configure
+
+The package adds the installing account to Docker's `docker` group and installs a sudo rule limited to MineServe's runtime helper for the App Settings reinstall action. Docker group access grants broad control over the host, as required to create and manage containers. Log out and back in after installation to apply the group membership.
+
+Run `mineserve`, choose **Khởi chạy / khởi động lại panel**, then open `http://127.0.0.1:8080`. Sign in with the credentials configured on first launch. Use **Tạo server** to enter the name and MOTD, choose platform and an available Minecraft version, set RAM and port, accept the EULA, and create the container. Paper + Geyser also maps a Bedrock UDP port. Server data is stored per server under `~/.local/share/mineserve/servers`.
+
+### Management and data
+
+Use the panel to start, stop, and restart each server container, send console commands, view logs, and edit server files. Server data is stored under the current account's MineServe data directory. Run `mineserve` and choose **Dừng web panel** to stop only the management UI; Minecraft containers continue running under Docker.
+
+Each server runs in its own `itzg/minecraft-server` container with persistent data. The panel includes server version/build upgrades, visual properties and JVM settings, console and logs, file operations, player administration, Modrinth plugin/mod search and modpack installation, backups with restore and retention, WebDAV or mounted-folder sync, scheduled automation, world import/export/reset/chunk pruning, Squaremap, CPU/RAM/TPS/MSPT status, UPnP forwarding, and per-server Bore/Playit tunnels. App-specific QR sharing, Android system integrations, player skin avatars, and Android-only diagnostics remain native-app features. Linux console macros and command history are available in the web panel. For public hosting, put the panel behind HTTPS or a trusted VPN; Minecraft ports remain independently accessible to clients.
+
+To stop only the menu and leave the panel running in the background, choose **Ẩn menu**.
+
+---
+
 ## 📖 Quick Usage Guide
 
 ### 1. First-Time Setup
@@ -266,7 +303,7 @@ On initial launch, tap **Initialize Server Runtime**. MineServe will download an
 ### 3. Managing the Server
 The Server Details screen provides dedicated tabs to manage every aspect of your server:
 * **Console Tab**: View live colored terminal logs, use customizable macro hotbar buttons, and execute Minecraft commands with auto-completion.
-* **Performance Tab**: Monitor real-time TPS gauges, rolling historical Canvas graphs, MSPT processing time, tick budget headroom, proactive lag diagnostics, and apply Aikar's G1GC flags preset.
+* **Performance Tab**: Monitor CPU, RAM, server storage, TPS/MSPT rolling graphs, engine and game-loop health, JVM/GC tuning (including Aikar flags), process diagnostics, container path, primary JAR, and storage contents. **App Settings** supports English and Vietnamese; Java presets and file manager controls follow the selected language, and files/folders open on double-click.
 * **Automation Tab**: Configure idle auto-shutdown, arm auto-wake on ping standby listeners, and set up cron-scheduled backups and restarts.
 * **Files Tab**: Browse server files, extract `.zip` archives in-place or into subfolders, edit configs in the monospace code editor, or inspect crash reports with the 1-tap Diagnostic Sheet.
 * **World Tab**: Import singleplayer `.zip` or `.mcworld` saves, export world archives, reset Nether or End dimensions, and optimize chunk storage.

@@ -1,0 +1,10 @@
+Package: mineserve
+Version: 2.1.3
+Section: net
+Priority: optional
+Architecture: all
+Depends: python3 (>= 3.10), docker.io, sudo, miniupnpc
+Maintainer: MineServe contributors
+Description: Docker-backed Minecraft server manager and web panel
+ MineServe Linux manages multiple Minecraft server containers and provides an
+ authenticated web panel for server creation, console, files, and runtime setup.

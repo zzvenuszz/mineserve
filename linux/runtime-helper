@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+case "${1:-}" in
+    install)
+        apt-get install -y docker.io
+        systemctl enable --now docker
+        ;;
+    reinstall)
+        apt-get install --reinstall -y docker.io
+        systemctl restart docker
+        ;;
+    restart)
+        systemctl restart docker
+        ;;
+    *)
+        echo "Usage: mineserve-runtime-helper {install|reinstall|restart}" >&2
+        exit 2
+        ;;
+esac

@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+if [ "$1" = "purge" ]; then
+    rm -f /etc/sudoers.d/mineserve-runtime
+fi
+exit 0

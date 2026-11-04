@@ -1,0 +1,23 @@
+services:
+  mineserve:
+    build: .
+    image: mineserve:linux
+    container_name: mineserve
+    init: true
+    restart: unless-stopped
+    environment:
+      MINESERVE_PASSWORD: ${MINESERVE_PASSWORD:?Set MINESERVE_PASSWORD in .env}
+      MINESERVE_USER: ${MINESERVE_USER:-admin}
+      MAX_RAM_MB: ${MAX_RAM_MB:-8192}
+      MC_PORT: ${MC_PORT:-25565}
+      WEB_PORT: 8080
+    ports:
+      - "${WEB_BIND:-0.0.0.0}:8080:8080/tcp"
+      - "${MC_PORT:-25565}:${MC_PORT:-25565}/tcp"
+      - "${MC_PORT:-25565}:${MC_PORT:-25565}/udp"
+    volumes:
+      - mineserve-data:/data
+    stop_grace_period: 70s
+
+volumes:
+  mineserve-data:

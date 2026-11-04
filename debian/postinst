@@ -1,0 +1,22 @@
+#!/bin/sh
+set -eu
+
+if [ -n "${SUDO_USER:-}" ] && getent passwd "$SUDO_USER" >/dev/null 2>&1; then
+    if getent group docker >/dev/null 2>&1; then
+        usermod -aG docker "$SUDO_USER" || true
+    fi
+    if command -v visudo >/dev/null 2>&1; then
+        rule="${SUDO_USER} ALL=(root) NOPASSWD: /usr/lib/mineserve/runtime-helper install, /usr/lib/mineserve/runtime-helper reinstall, /usr/lib/mineserve/runtime-helper restart"
+        printf '%s\n' "$rule" > /etc/sudoers.d/mineserve-runtime
+        chmod 0440 /etc/sudoers.d/mineserve-runtime
+        if ! visudo -cf /etc/sudoers.d/mineserve-runtime >/dev/null; then
+            rm -f /etc/sudoers.d/mineserve-runtime
+            echo "MineServe runtime sudo rule was not installed; use host administrator commands." >&2
+        fi
+    fi
+    echo "MineServe configured Docker access for $SUDO_USER. Log out and back in to refresh docker group membership."
+else
+    echo "MineServe could not identify the installing user. Add your user to the docker group to manage containers."
+fi
+
+exit 0
