@@ -9,9 +9,9 @@
 [![Architecture](https://img.shields.io/badge/Architecture-ARM64%20%7C%20x86__64%20%7C%20ARMv7-orange.svg)](#4-multi-architecture-support)
 [![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 
-**MineServe** is an open-source Android application designed to download, configure, run, and manage full-featured dedicated Minecraft servers natively on Android devices **without requiring root permissions**.
+**MineServe** is an open-source Minecraft server manager with two editions: a native Android app and a Linux edition that manages isolated Minecraft servers with Docker and a browser-based admin panel. The Linux edition is designed for Debian and Ubuntu hosts; the Android edition runs servers without root access.
 
-Powered by a native **PRoot** virtualization engine, a JNI-backed **PTY pseudo-terminal**, multi-version **OpenJDK runtime isolation (Java 8, 17, 21, 25)**, live telemetry monitoring with rolling charts, zero-config UPnP/NAT-PMP router port forwarding, public high-speed tunneling, automated cloud backup sync, web remote admin panel, smart auto-wake automation, and a modern **Jetpack Compose** interface, MineServe turns your smartphone or tablet into a portable, high-performance Minecraft dedicated server host.
+On Linux, MineServe runs each Minecraft server in its own Docker container and provides a responsive web panel for server creation, console, files, plugins and mods, world operations, backups, performance, and networking. On Android, MineServe uses a native **PRoot** runtime, isolated Java environments, and a **Jetpack Compose** interface to turn a phone or tablet into a portable server host.
 
 <p align="center">
   <a href="https://play.google.com/store/apps/details?id=com.devwithzachary.mineserve">
@@ -24,7 +24,20 @@ Powered by a native **PRoot** virtualization engine, a JNI-backed **PTY pseudo-t
 
 ---
 
-## 🚀 Key Features
+## 🐧 Linux Edition at a Glance
+
+The Linux edition is controlled from a web browser. Install the Debian package, run `mineserve` in a terminal to start or configure the panel, then sign in from the host or another device according to the selected exposure mode.
+
+* Create and manage multiple independent Docker servers: Paper, Purpur, Paper + Geyser cross-play, Vanilla, Fabric, Forge, NeoForge, and Folia.
+* Choose a supported Minecraft version, server name, MOTD, RAM range, and ports; server creation requires explicit EULA acceptance.
+* Manage console commands and macros, logs, server files, plugin/mod uploads and Modrinth installs, players, backups, and world import/export/reset/optimization.
+* Review CPU, memory, storage, TPS/MSPT, JVM and game-loop health, process diagnostics, and server storage details.
+* Configure the Docker runtime and install Java 8, 17, 21, or 25 server images from App Settings.
+* Expose the admin panel locally, on the LAN, or through ngrok, playit.gg, or bore.pub. Tunnel agents are installed on demand when missing.
+
+See [Run MineServe on Linux with Docker](#-run-mineserve-on-linux-with-docker) for installation, setup, and tunnel details.
+
+## 📱 Android Edition Features
 
 * **🔒 100% Rootless Operation**: Executes entirely in Android user-space using PRoot ptrace system call interception. No root access, Magisk, or bootloader unlocking required.
 * **🎮 Comprehensive Server Engine Support**:
@@ -120,7 +133,7 @@ Powered by a native **PRoot** virtualization engine, a JNI-backed **PTY pseudo-t
 
 ---
 
-## 🛠️ How It Works (Technical Architecture)
+## 🛠️ Android Edition: Technical Architecture
 
 ```
 +-----------------------------------------------------------------------+
@@ -216,7 +229,7 @@ Special thanks to our generous Patreon supporters whose contributions help fuel 
 
 ---
 
-## 📥 Download & Installation
+## 📥 Android Edition: Download & Installation
 
 * **Google Play Store**: Install directly with automatic updates from [Google Play](https://play.google.com/store/apps/details?id=com.devwithzachary.mineserve).
 * **GitHub Releases**: Download standalone signed APK packages directly from [GitHub Releases](https://github.com/devwithzachary/MineServe/releases).
@@ -224,7 +237,7 @@ Special thanks to our generous Patreon supporters whose contributions help fuel 
 
 ---
 
-## 🛠️ Building from Source
+## 🛠️ Android Edition: Building from Source
 
 ### Prerequisites
 * **Android Studio**: Ladybug (2024.2.1) or newer recommended.
@@ -253,7 +266,11 @@ Special thanks to our generous Patreon supporters whose contributions help fuel 
 
 ## 🐳 Run MineServe on Linux with Docker
 
-### Install the native Debian package
+### Requirements and installation
+
+Use a Debian or Ubuntu Linux host with a supported Docker-capable CPU architecture, internet access for downloading container images, and a user account that can access Docker. The package depends on Python 3, Docker, sudo, and miniupnpc. Install Docker through the package dependency or an existing Docker Engine installation. The panel manages Minecraft servers as Docker containers; MineServe itself is a host-side service and does not run inside a MineServe container.
+
+Build and install the native Debian package from the repository:
 
 On Debian or Ubuntu, build the package from this repository (requires `dpkg-deb`):
 
@@ -262,33 +279,41 @@ On Debian or Ubuntu, build the package from this repository (requires `dpkg-deb`
 sudo apt install ./mineserve.deb
 ```
 
-Log out and back in so the Docker group change takes effect, then run `mineserve`.
+The package adds the installing account to Docker's `docker` group and configures a restricted sudo rule for the runtime reinstall action in App Settings. Log out and back in (or start a new login session) so the group membership takes effect, then run `mineserve`. Membership in the Docker group allows broad control over the host.
 
-The first run asks for the web panel username and password (minimum 8 characters), then opens the terminal menu. Configuration is split into separate items for credentials, panel port, exposure method, and optional ngrok token, so changing one setting does not ask for credentials again. Choose **Khởi chạy / khởi động lại panel** to start it. The panel runs in the background after the menu exits; choose **Ẩn menu** to return to the shell, then run `mineserve` again to reopen the menu for that same process. The menu can choose local-only, LAN, ngrok, playit.gg, or bore.pub exposure and displays the tunnel address once the agent reports it. Logs include panel, Minecraft, and tunnel output; press Enter after viewing logs to return to the menu. Credentials and settings are stored with user-only file permissions under `~/.config/mineserve`; server files and logs are under `~/.local/share/mineserve`.
+Tunnel binaries are downloaded from their provider's release source into `~/.local/bin` on demand without `sudo`. See [ngrok Linux downloads](https://ngrok.com/download/linux), [playit releases](https://github.com/playit-cloud/playit-agent/releases), and [bore releases](https://github.com/ekzhang/bore/releases).
 
-When an ngrok, playit, or bore executable is missing, MineServe downloads its Linux binary from the provider's official release source into `~/.local/bin` when that tunnel is selected or the panel starts. It does not need `sudo` for this install. See the providers' [ngrok Linux downloads](https://ngrok.com/download/linux), [playit releases](https://github.com/playit-cloud/playit-agent/releases), and [bore releases](https://github.com/ekzhang/bore/releases). Ngrok requires an account and valid authtoken; if none is set, MineServe offers to switch to bore.pub, which assigns a random remote port without a token. Playit can use its claimed agent profile. For playit, run `playit setup` once to claim the agent. Then select its exposure mode from the MineServe menu. For local mode, the panel binds only to `127.0.0.1`; LAN binds to all host interfaces. Tunnel modes bind the panel to loopback and start the selected agent.
+### Start the panel and configure access
 
-This is a terminal-managed background process, not a graphical system tray icon. It does not automatically start at boot; launch it with `mineserve` when needed.
+The first `mineserve` launch asks for a panel username and password (at least 8 characters). The terminal menu has separate settings for credentials, panel port, exposure mode, and optional ngrok token. Choose **Khởi chạy / khởi động lại panel**, then open `http://127.0.0.1:<panel-port>` and sign in. The default panel port is `8080`.
 
-The Android application uses Android services, storage APIs, and JNI, so its APK cannot run as a Linux container. The native Linux edition manages multiple Minecraft containers through Docker Engine. It supports Paper, Purpur, Paper + Geyser cross-play, Vanilla, Fabric, Forge, NeoForge, and Folia, with version lists fetched from each platform's version service. Each server has its own container, port, RAM allocation, MOTD, files, and console. The web panel's **App Settings** page reports Docker Engine status, can reinstall its runtime package, and can pull Java 8, 17, 21, or 25 server images with one button.
+Exposure options:
 
-### Start and configure
+* **Local** binds the panel to `127.0.0.1`, so only the host can access it.
+* **LAN** makes the panel available through the host's network interfaces. Use the displayed LAN address from a trusted network.
+* **ngrok** requires an ngrok account and valid authtoken. Configure the token in the terminal menu.
+* **playit.gg** uses the installed agent profile; run `playit setup` once to claim it, then select playit in MineServe.
+* **bore.pub** can create a random public TCP address without an account token. It is also offered as an alternative when ngrok has no valid token.
 
-The package adds the installing account to Docker's `docker` group and installs a sudo rule limited to MineServe's runtime helper for the App Settings reinstall action. Docker group access grants broad control over the host, as required to create and manage containers. Log out and back in after installation to apply the group membership.
+Once a tunnel is connected, MineServe shows its public panel address in the menu. Use **Ẩn menu** to leave the panel running in the background and return to the shell; run `mineserve` again to reopen the menu for the existing process. Choosing **Dừng web panel** stops the panel but leaves Minecraft containers running. This is a terminal-managed background service, not a graphical system tray app, and it does not start automatically at boot.
 
-Run `mineserve`, choose **Khởi chạy / khởi động lại panel**, then open `http://127.0.0.1:8080`. Sign in with the credentials configured on first launch. Use **Tạo server** to enter the name and MOTD, choose platform and an available Minecraft version, set RAM and port, accept the EULA, and create the container. Paper + Geyser also maps a Bedrock UDP port. Server data is stored per server under `~/.local/share/mineserve/servers`.
+### Create and manage servers
+
+In the panel, select **Tạo server**, enter its name and MOTD, choose a platform and an available Minecraft version, allocate initial and maximum RAM, choose server ports, accept the Minecraft EULA, and create it. Paper + Geyser also configures a Bedrock UDP port. Each server runs in its own `itzg/minecraft-server` container with persistent data under `~/.local/share/mineserve/servers`.
+
+App Settings reports Docker Engine status, offers the runtime reinstall action, and installs Java 8, 17, 21, or 25 images with one button. Minecraft container images are downloaded as needed; allow outbound internet access and enough disk space for images and worlds.
 
 ### Management and data
 
-Use the panel to start, stop, and restart each server container, send console commands, view logs, and edit server files. Server data is stored under the current account's MineServe data directory. Run `mineserve` and choose **Dừng web panel** to stop only the management UI; Minecraft containers continue running under Docker.
+Use the panel to start, stop, and restart each server container, send console commands, view logs, and edit server files. The management tabs include overview and server settings, Console, Performance, Files, Plugins/Mods, Players, Backups, World, Automation, and Squaremap when supported by the server type.
 
 Each server runs in its own `itzg/minecraft-server` container with persistent data. The panel includes server version/build upgrades, visual properties and JVM settings, console and logs, file operations, player administration, Modrinth plugin/mod search and modpack installation, backups with restore and retention, WebDAV or mounted-folder sync, scheduled automation, world import/export/reset/chunk pruning, Squaremap, CPU/RAM/TPS/MSPT status, UPnP forwarding, and per-server Bore/Playit tunnels. App-specific QR sharing, Android system integrations, player skin avatars, and Android-only diagnostics remain native-app features. Linux console macros and command history are available in the web panel. For public hosting, put the panel behind HTTPS or a trusted VPN; Minecraft ports remain independently accessible to clients.
 
-To stop only the menu and leave the panel running in the background, choose **Ẩn menu**.
+The terminal menu's **Xem log** option displays panel and tunnel logs; press Enter to return to the menu. Settings and credentials are stored under `~/.config/mineserve` with user-only permissions. Panel logs and server data are under `~/.local/share/mineserve`.
 
 ---
 
-## 📖 Quick Usage Guide
+## 📖 Android Edition: Quick Usage Guide
 
 ### 1. First-Time Setup
 On initial launch, tap **Initialize Server Runtime**. MineServe will download and unpack the minimal Ubuntu base container and prepare the OpenJDK environment.
